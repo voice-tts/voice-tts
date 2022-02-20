@@ -16,13 +16,12 @@ A simple text to speech API with 50+ voices [**available on RapidAPI**](https://
 Send a `POST` request to the `/read` endpoint with a JSON object containing the text to read, for example:
 
 ```json
-{ "text": "Hello world" }
+{ "text": "Hello world!" }
 ```
 
 You will receive a response with a JSON object containing
 the audio output encoded in [**Base64**](https://en.wikipedia.org/wiki/Base64).
 To play the audio file, you first need to decode the Base64 string; this operation is supported by most programming languages.
-
 
 #### Request Body
 
@@ -30,15 +29,15 @@ You must send a **JSON object** to the `/read` endpoint shaped like this:
 
 ```json
 {
-  "text": "Hello world",
-  "voice": "en-US-01",
+  "text": "Hello world!",
+  "voice": "std-en-US-01",
   "format": "mp3"
 }
 ```
 
 Property `text` is **required** and its length must be between 1 and 3000 characters for users on paid plans and between 1 and 500 characters for users on the free plan.
 
-Property `voice` is optional and must contain one of the [**available voice IDs**](#available-voices); the default value is `en-US-01`.
+Property `voice` is optional and must contain one of the [**available voice IDs**](#available-voices); the default value is `std-en-US-01`.
 
 Property `format` is optional and must contain one of the [**available audio formats**](#available-formats); the default value is `mp3`.
 
@@ -48,24 +47,26 @@ On a successful request, you will receive an [**HTTP 200 OK**](https://developer
 
 ```json
 {
-  "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+  "meta": {
+    "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+    "credits": 12
+  },
   "data": {
-    "text": "Hello world",
-    "voice": "en-US-01",
+    "text": "Hello world!",
+    "voice": "std-en-US-01",
     "format": "mp3",
-    "audio": "SGVsbG8gd29ybGQgYXVkaW8gZXhhbXBsZQ==",
-    "characters": 11
+    "audio": "SGVsbG8gd29ybGQgYXVkaW8gZXhhbXBsZQ=="
   }
 }
 ```
 
-Property `request_id` contains a unique ID identifying a specific request; this can be used for support tickets.
+Property `meta.request_id` contains a unique ID identifying a specific request; this can be used for support tickets.
+
+Property `meta.credits` contains the number of credits consumed for this request.
 
 Properties `data.text`, `data.voice` and `data.format` contain the values submitted in the request.
 
 Property `data.audio` contains the audio bytes encoded in [**Base64**](https://en.wikipedia.org/wiki/Base64).
-
-Property `data.characters` contains the number of characters billed to your account.
 
 #### Unsuccessful Response
 
@@ -73,7 +74,10 @@ On an unsuccessful request, you will receive an [**HTTP 400 Bad Request**](https
 
 ```json
 {
-  "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+  "meta": {
+    "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+    "credits": 0
+  },
   "error": {
     "type": "invalid_speech_request",
     "message": "Expected a valid speech request, encountered the listed issues",
@@ -84,7 +88,9 @@ On an unsuccessful request, you will receive an [**HTTP 400 Bad Request**](https
 }
 ```
 
-Property `request_id` contains a unique ID identifying a specific request; this can be used for support tickets.
+Property `meta.request_id` contains a unique ID identifying a specific request; this can be used for support tickets.
+
+Property `meta.credits` contains the number of credits consumed for this request.
 
 Property `error.type` contains the error type identifier. See the [**Error Types**](#error-types) section.
 
@@ -98,7 +104,10 @@ When the speech service is unavailable, you will receive an [**HTTP 503 Service 
 
 ```json
 {
-  "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+  "meta": {
+    "request_id": "24fLk8lojIhL1083eH4skD6XujJ",
+    "credits": 0
+  },
   "error": {
     "type": "speech_service_unavailable",
     "message": "Failed to process speech request, try again later",
@@ -110,6 +119,7 @@ When the speech service is unavailable, you will receive an [**HTTP 503 Service 
 ## Available Voices
 
 The following table describes the available voices.
+Use a value from the **Voice ID** column in your requests.
 
 <table>
   <thead>
@@ -123,482 +133,483 @@ The following table describes the available voices.
   <tbody>
     <tr>
       <td>
-        <code>arb-01</code>
+        <code>std-ar-BH-01</code>
       </td>
-      <td>arb</td>
-      <td>Arabic</td>
+      <td>ar-BH</td>
+      <td>Arabic (Bahrain)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>cmn-CN-01</code>
-      </td>
-      <td>cmn-CN</td>
-      <td>Chinese Mandarin</td>
-      <td>Female</td>
-    </tr>
-    <tr>
-      <td>
-        <code>cy-GB-01</code>
+        <code>std-cy-GB-01</code>
       </td>
       <td>cy-GB</td>
-      <td>Welsh</td>
+      <td>Welsh (UK)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>da-DK-01</code>
+        <code>std-da-DK-01</code>
       </td>
       <td>da-DK</td>
-      <td>Danish</td>
+      <td>Danish (Denmark)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>da-DK-02</code>
+        <code>std-da-DK-02</code>
       </td>
       <td>da-DK</td>
-      <td>Danish</td>
+      <td>Danish (Denmark)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>de-DE-01</code>
+        <code>std-de-DE-01</code>
       </td>
       <td>de-DE</td>
-      <td>German</td>
+      <td>German (Germany)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>de-DE-02</code>
+        <code>std-de-DE-02</code>
       </td>
       <td>de-DE</td>
-      <td>German</td>
+      <td>German (Germany)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>de-DE-03</code>
+        <code>std-de-DE-03</code>
       </td>
       <td>de-DE</td>
-      <td>German</td>
+      <td>German (Germany)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-AU-01</code>
+        <code>std-en-AU-01</code>
       </td>
       <td>en-AU</td>
-      <td>Australian English</td>
+      <td>English (Australia)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-AU-02</code>
+        <code>std-en-AU-02</code>
       </td>
       <td>en-AU</td>
-      <td>Australian English</td>
+      <td>English (Australia)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>en-GB-01</code>
+        <code>std-en-GB-01</code>
       </td>
       <td>en-GB</td>
-      <td>British English</td>
+      <td>English (UK)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-GB-02</code>
+        <code>std-en-GB-02</code>
       </td>
       <td>en-GB</td>
-      <td>British English</td>
+      <td>English (UK)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>en-GB-03</code>
+        <code>std-en-GB-03</code>
       </td>
       <td>en-GB</td>
-      <td>British English</td>
+      <td>English (UK)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-GB-WLS-01</code>
+        <code>std-en-GB-04</code>
       </td>
-      <td>en-GB-WLS</td>
-      <td>Welsh English</td>
+      <td>en-GB</td>
+      <td>English (Wales)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>en-IN-01</code>
+        <code>std-en-IN-01</code>
       </td>
       <td>en-IN</td>
-      <td>Indian English</td>
+      <td>English (India)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-IN-02</code>
+        <code>std-en-IN-02</code>
       </td>
       <td>en-IN</td>
-      <td>Indian English</td>
+      <td>English (India)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-01</code>
+        <code>std-en-US-01</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-02</code>
+        <code>std-en-US-02</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-03</code>
+        <code>std-en-US-03</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-04</code>
+        <code>std-en-US-04</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-05</code>
+        <code>std-en-US-05</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>en-US-06</code>
+        <code>std-en-US-06</code>
       </td>
       <td>en-US</td>
-      <td>US English</td>
+      <td>English (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>es-ES-01</code>
+        <code>std-es-ES-01</code>
       </td>
       <td>es-ES</td>
-      <td>Castilian Spanish</td>
+      <td>Spanish (Spain)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>es-ES-02</code>
+        <code>std-es-ES-02</code>
       </td>
       <td>es-ES</td>
-      <td>Castilian Spanish</td>
+      <td>Spanish (Spain)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>es-ES-03</code>
+        <code>std-es-ES-03</code>
       </td>
       <td>es-ES</td>
-      <td>Castilian Spanish</td>
+      <td>Spanish (Spain)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>es-MX-01</code>
+        <code>std-es-MX-01</code>
       </td>
       <td>es-MX</td>
-      <td>Mexican Spanish</td>
+      <td>Spanish (Mexico)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>es-US-01</code>
+        <code>std-es-US-01</code>
       </td>
       <td>es-US</td>
-      <td>US Spanish</td>
+      <td>Spanish (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>es-US-02</code>
+        <code>std-es-US-02</code>
       </td>
       <td>es-US</td>
-      <td>US Spanish</td>
+      <td>Spanish (USA)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>es-US-03</code>
+        <code>std-es-US-03</code>
       </td>
       <td>es-US</td>
-      <td>US Spanish</td>
+      <td>Spanish (USA)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>fr-CA-01</code>
+        <code>std-fr-CA-01</code>
       </td>
       <td>fr-CA</td>
-      <td>Canadian French</td>
+      <td>French (Canada)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>fr-FR-01</code>
+        <code>std-fr-FR-01</code>
       </td>
       <td>fr-FR</td>
-      <td>French</td>
+      <td>French (France)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>fr-FR-02</code>
+        <code>std-fr-FR-02</code>
       </td>
       <td>fr-FR</td>
-      <td>French</td>
+      <td>French (France)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>fr-FR-03</code>
+        <code>std-fr-FR-03</code>
       </td>
       <td>fr-FR</td>
-      <td>French</td>
+      <td>French (France)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>hi-IN-01</code>
+        <code>std-hi-IN-01</code>
       </td>
       <td>hi-IN</td>
-      <td>Hindi</td>
+      <td>Hindi (India)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>is-IS-01</code>
+        <code>std-is-IS-01</code>
       </td>
       <td>is-IS</td>
-      <td>Icelandic</td>
+      <td>Icelandic (Iceland)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>is-IS-02</code>
+        <code>std-is-IS-02</code>
       </td>
       <td>is-IS</td>
-      <td>Icelandic</td>
+      <td>Icelandic (Iceland)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>it-IT-01</code>
+        <code>std-it-IT-01</code>
       </td>
       <td>it-IT</td>
-      <td>Italian</td>
+      <td>Italian (Italy)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>it-IT-02</code>
+        <code>std-it-IT-02</code>
       </td>
       <td>it-IT</td>
-      <td>Italian</td>
+      <td>Italian (Italy)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>it-IT-03</code>
+        <code>std-it-IT-03</code>
       </td>
       <td>it-IT</td>
-      <td>Italian</td>
+      <td>Italian (Italy)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>ja-JP-01</code>
+        <code>std-ja-JP-01</code>
       </td>
       <td>ja-JP</td>
-      <td>Japanese</td>
+      <td>Japanese (Japan)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>ja-JP-02</code>
+        <code>std-ja-JP-02</code>
       </td>
       <td>ja-JP</td>
-      <td>Japanese</td>
+      <td>Japanese (Japan)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>ko-KR-01</code>
+        <code>std-ko-KR-01</code>
       </td>
       <td>ko-KR</td>
-      <td>Korean</td>
+      <td>Korean (Korea)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>nb-NO-01</code>
+        <code>std-nb-NO-01</code>
       </td>
       <td>nb-NO</td>
-      <td>Norwegian</td>
+      <td>Norwegian (Norway)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>nl-NL-01</code>
+        <code>std-nl-NL-01</code>
       </td>
       <td>nl-NL</td>
-      <td>Dutch</td>
+      <td>Dutch (Netherlands)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>nl-NL-02</code>
+        <code>std-nl-NL-02</code>
       </td>
       <td>nl-NL</td>
-      <td>Dutch</td>
+      <td>Dutch (Netherlands)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>pl-PL-01</code>
+        <code>std-pl-PL-01</code>
       </td>
       <td>pl-PL</td>
-      <td>Polish</td>
+      <td>Polish (Poland)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>pl-PL-02</code>
+        <code>std-pl-PL-02</code>
       </td>
       <td>pl-PL</td>
-      <td>Polish</td>
+      <td>Polish (Poland)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>pl-PL-03</code>
+        <code>std-pl-PL-03</code>
       </td>
       <td>pl-PL</td>
-      <td>Polish</td>
+      <td>Polish (Poland)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>pl-PL-04</code>
+        <code>std-pl-PL-04</code>
       </td>
       <td>pl-PL</td>
-      <td>Polish</td>
+      <td>Polish (Poland)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>pt-BR-01</code>
+        <code>std-pt-BR-01</code>
       </td>
       <td>pt-BR</td>
-      <td>Brazilian Portuguese</td>
+      <td>Portuguese (Brazil)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>pt-BR-02</code>
+        <code>std-pt-BR-02</code>
       </td>
       <td>pt-BR</td>
-      <td>Brazilian Portuguese</td>
+      <td>Portuguese (Brazil)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>pt-BR-03</code>
+        <code>std-pt-BR-03</code>
       </td>
       <td>pt-BR</td>
-      <td>Brazilian Portuguese</td>
+      <td>Portuguese (Brazil)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>pt-PT-01</code>
+        <code>std-pt-PT-01</code>
       </td>
       <td>pt-PT</td>
-      <td>Portuguese</td>
+      <td>Portuguese (Portugal)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>pt-PT-02</code>
+        <code>std-pt-PT-02</code>
       </td>
       <td>pt-PT</td>
-      <td>Portuguese</td>
+      <td>Portuguese (Portugal)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>ro-RO-01</code>
+        <code>std-ro-RO-01</code>
       </td>
       <td>ro-RO</td>
-      <td>Romanian</td>
+      <td>Romanian (Romania)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>ru-RU-01</code>
+        <code>std-ru-RU-01</code>
       </td>
       <td>ru-RU</td>
-      <td>Russian</td>
+      <td>Russian (Russia)</td>
       <td>Male</td>
     </tr>
     <tr>
       <td>
-        <code>ru-RU-02</code>
+        <code>std-ru-RU-02</code>
       </td>
       <td>ru-RU</td>
-      <td>Russian</td>
+      <td>Russian (Russia)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>sv-SE-01</code>
+        <code>std-sv-SE-01</code>
       </td>
       <td>sv-SE</td>
-      <td>Swedish</td>
+      <td>Swedish (Sweden)</td>
       <td>Female</td>
     </tr>
     <tr>
       <td>
-        <code>tr-TR-01</code>
+        <code>std-tr-TR-01</code>
       </td>
       <td>tr-TR</td>
-      <td>Turkish</td>
+      <td>Turkish (Turkey)</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <td>
+        <code>std-zh-CN-01</code>
+      </td>
+      <td>zh-CN</td>
+      <td>Chinese (Mandarin)</td>
       <td>Female</td>
     </tr>
   </tbody>
 </table>
 
-### Available Formats
+## Available Formats
 
 The following table describes the available audio formats.
+Use a value from the **Format ID** column in your requests.
 
 <table>
   <thead>
@@ -623,7 +634,7 @@ The following table describes the available audio formats.
   </tbody>
 </table>
 
-### Error Types
+## Error Types
 
 The following table describes the possible error types.
 
